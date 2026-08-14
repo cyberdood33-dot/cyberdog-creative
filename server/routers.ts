@@ -56,6 +56,11 @@ export const appRouter = router({
     list: protectedProcedure.query(({ ctx }) => db.listSavedItems(ctx.user.id)),
     toggle: protectedProcedure.input(z.object({ itemType: z.enum(["portfolio", "blog", "docs", "social"]), itemId: z.number().int().positive() })).mutation(({ ctx, input }) => db.toggleSavedItem(ctx.user.id, input.itemType, input.itemId)),
   }),
+  notifications: router({
+    inbox: protectedProcedure.query(({ ctx }) => db.listNotifications(ctx.user.id)),
+    markRead: protectedProcedure.input(z.object({ ids: z.array(z.number().int().positive()).max(60).optional() }).optional()).mutation(({ ctx, input }) => db.markNotificationsRead(ctx.user.id, input?.ids)),
+    create: adminProcedure.input(z.object({ userId: z.number().int().positive(), type: z.enum(["system", "comment", "follow", "friend", "support", "release"]), title: text(3, 180), body: text(3, 3000), href: z.string().startsWith("/").max(2048).optional() })).mutation(({ input }) => db.createNotification(input)),
+  }),
   messenger: router({
     registerDeviceKey: protectedProcedure.input(z.object({ publicJwk: z.string().min(20).max(12000) })).mutation(({ ctx, input }) => db.upsertProfile(ctx.user.id, { publicEncryptionKey: input.publicJwk })),
     memberKey: protectedProcedure.input(z.object({ memberId: z.number().int().positive() })).query(({ input }) => db.getMemberKey(input.memberId)),
@@ -98,6 +103,10 @@ export const appRouter = router({
   automation: router({
     analyticsSummary: protectedProcedure.input(z.object({ events: z.array(z.object({ eventType: text(1, 120), occurredAt: z.string().datetime().optional() })).max(2000) })).mutation(({ input }) => callFastapi<{ event_count: number; unique_event_types: number; top_events: Array<{ event_type: string; count: number }>; note: string }>("/analytics/summarize", { events: input.events.map(event => ({ event_type: event.eventType, occurred_at: event.occurredAt })) })),
     importPreview: adminProcedure.input(z.object({ format: z.enum(["csv", "json"]), content: text(2, 2_000_000), allowedColumns: z.array(text(1, 120)).min(1).max(80) })).mutation(({ input }) => callFastapi<{ format: string; row_count: number; columns: string[]; unsupported_columns: string[]; accepted: boolean; note: string }>("/data/import-preview", { format: input.format, content: input.content, allowed_columns: input.allowedColumns })),
+    exportData: adminProcedure.input(z.object({ dataset: z.enum(["portfolio", "blog", "docs", "social"]), format: z.enum(["csv", "json"]) })).mutation(async ({ input }) => {
+      const dataset = await db.exportDataset(input.dataset);
+      return callFastapi<{ format: "csv" | "json"; row_count: number; content: string; mime_type: string; columns: string[] }>("/data/export", { format: input.format, rows: dataset.rows, allowed_columns: dataset.columns });
+    }),
     automationBrief: protectedProcedure.input(z.object({ prompt: text(12, 2200) })).mutation(({ input }) => callFastapi<{ content: string }>("/ai/brief", input)),
   }),
 });

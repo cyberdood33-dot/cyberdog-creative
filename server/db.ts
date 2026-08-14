@@ -1,4 +1,4 @@
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, isNull, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { nanoid } from "nanoid";
 import {
@@ -10,6 +10,7 @@ import {
   follows,
   friendships,
   InsertUser,
+  memberNotifications,
   portfolioItems,
   savedItems,
   socialComments,
@@ -139,6 +140,29 @@ export async function listSavedItems(userId: number) {
   return db.select().from(savedItems).where(eq(savedItems.userId, userId)).orderBy(desc(savedItems.createdAt));
 }
 
+export async function listNotifications(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(memberNotifications).where(eq(memberNotifications.userId, userId)).orderBy(desc(memberNotifications.createdAt)).limit(60);
+}
+
+export async function markNotificationsRead(userId: number, ids?: number[]) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  const now = new Date();
+  if (ids && ids.length > 0) {
+    for (const id of ids) await db.update(memberNotifications).set({ readAt: now }).where(and(eq(memberNotifications.id, id), eq(memberNotifications.userId, userId)));
+    return;
+  }
+  await db.update(memberNotifications).set({ readAt: now }).where(and(eq(memberNotifications.userId, userId), isNull(memberNotifications.readAt)));
+}
+
+export async function createNotification(values: { userId: number; type: "system" | "comment" | "follow" | "friend" | "support" | "release"; title: string; body: string; href?: string }) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  await db.insert(memberNotifications).values({ ...values, href: values.href ?? null });
+}
+
 export async function followMember(followerId: number, followingId: number) {
   if (followerId === followingId) throw new Error("You cannot follow your own profile");
   const db = await getDb();
@@ -231,6 +255,25 @@ export async function listDocs(slug?: string) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(docsPages).where(slug ? and(eq(docsPages.slug, slug), eq(docsPages.published, true)) : eq(docsPages.published, true)).orderBy(docsPages.category, docsPages.sortOrder);
+}
+
+export async function exportDataset(dataset: "portfolio" | "blog" | "docs" | "social") {
+  const db = await getDb();
+  if (!db) return { columns: [] as string[], rows: [] as Array<Record<string, unknown>> };
+  if (dataset === "portfolio") {
+    const rows = await db.select({ id: portfolioItems.id, title: portfolioItems.title, summary: portfolioItems.summary, kind: portfolioItems.kind, linkUrl: portfolioItems.linkUrl, imageUrl: portfolioItems.imageUrl, featured: portfolioItems.featured, sortOrder: portfolioItems.sortOrder, createdAt: portfolioItems.createdAt }).from(portfolioItems).orderBy(portfolioItems.sortOrder);
+    return { columns: ["id", "title", "summary", "kind", "linkUrl", "imageUrl", "featured", "sortOrder", "createdAt"], rows };
+  }
+  if (dataset === "blog") {
+    const rows = await db.select({ id: blogPosts.id, slug: blogPosts.slug, title: blogPosts.title, excerpt: blogPosts.excerpt, body: blogPosts.body, status: blogPosts.status, publishedAt: blogPosts.publishedAt, createdAt: blogPosts.createdAt }).from(blogPosts).orderBy(desc(blogPosts.createdAt));
+    return { columns: ["id", "slug", "title", "excerpt", "body", "status", "publishedAt", "createdAt"], rows };
+  }
+  if (dataset === "docs") {
+    const rows = await db.select({ id: docsPages.id, slug: docsPages.slug, title: docsPages.title, summary: docsPages.summary, body: docsPages.body, category: docsPages.category, published: docsPages.published, sortOrder: docsPages.sortOrder, createdAt: docsPages.createdAt }).from(docsPages).orderBy(docsPages.category, docsPages.sortOrder);
+    return { columns: ["id", "slug", "title", "summary", "body", "category", "published", "sortOrder", "createdAt"], rows };
+  }
+  const rows = await db.select({ id: socialPosts.id, body: socialPosts.body, visibility: socialPosts.visibility, hidden: socialPosts.hidden, createdAt: socialPosts.createdAt }).from(socialPosts).orderBy(desc(socialPosts.createdAt));
+  return { columns: ["id", "body", "visibility", "hidden", "createdAt"], rows };
 }
 
 export async function createDoc(values: { slug: string; title: string; summary: string; body: string; category: string; sortOrder?: number; published?: boolean }) {

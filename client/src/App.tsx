@@ -4,6 +4,8 @@ import { PrefetchGate } from "@/components/PrefetchGate";
 import Account from "@/pages/Account";
 import Analytics from "@/pages/Analytics";
 import Automation from "@/pages/Automation";
+import Notifications from "@/pages/Notifications";
+import Notify from "@/pages/Notify";
 import Admin from "@/pages/Admin";
 import About from "@/pages/About";
 import Assist from "@/pages/Assist";
@@ -39,6 +41,8 @@ function Router() {
     <Route path="/account" component={Account} />
     <Route path="/analytics" component={Analytics} />
     <Route path="/automation" component={Automation} />
+    <Route path="/notifications" component={Notifications} />
+    <Route path="/notify" component={Notify} />
     <Route path="/admin" component={Admin} />
     <Route path="/messages" component={Messages} />
     <Route path="/assist" component={Assist} />

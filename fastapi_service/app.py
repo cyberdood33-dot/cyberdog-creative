@@ -35,6 +35,12 @@ class ImportPreviewRequest(BaseModel):
     allowed_columns: list[str] = Field(min_length=1, max_length=80)
 
 
+class ExportRequest(BaseModel):
+    format: Literal["csv", "json"]
+    rows: list[dict] = Field(max_length=MAX_ROWS)
+    allowed_columns: list[str] = Field(min_length=1, max_length=80)
+
+
 class BriefRequest(BaseModel):
     prompt: str = Field(min_length=12, max_length=2_200)
 
@@ -86,6 +92,26 @@ async def import_preview(request: ImportPreviewRequest):
         "accepted": not unsupported,
         "note": "Preview only. No records are written until an owner-approved import workflow is implemented.",
     }
+
+
+@app.post("/data/export", dependencies=[Depends(require_internal_token)])
+async def export_data(request: ExportRequest):
+    allowed = [column.strip() for column in request.allowed_columns if column.strip()]
+    safe_rows = [{column: row.get(column) for column in allowed} for row in request.rows]
+    if request.format == "json":
+        import json
+        content = json.dumps(safe_rows, ensure_ascii=False, separators=(",", ":"))
+        mime_type = "application/json"
+    else:
+        output = io.StringIO(newline="")
+        writer = csv.DictWriter(output, fieldnames=allowed, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(safe_rows)
+        content = output.getvalue()
+        mime_type = "text/csv"
+    if len(content.encode("utf-8")) > 2_000_000:
+        raise HTTPException(status_code=413, detail="Generated export exceeds the 2 MB workflow limit")
+    return {"format": request.format, "row_count": len(safe_rows), "content": content, "mime_type": mime_type, "columns": allowed}
 
 
 @app.post("/ai/brief", dependencies=[Depends(require_internal_token)])

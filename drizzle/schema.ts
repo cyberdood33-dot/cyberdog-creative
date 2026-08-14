@@ -102,6 +102,17 @@ export const savedItems = mysqlTable("savedItems", {
   index("savedItems_user_created_idx").on(table.userId, table.createdAt),
 ]);
 
+export const memberNotifications = mysqlTable("memberNotifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: mysqlEnum("type", ["system", "comment", "follow", "friend", "support", "release"]).default("system").notNull(),
+  title: varchar("title", { length: 180 }).notNull(),
+  body: text("body").notNull(),
+  href: varchar("href", { length: 2048 }),
+  readAt: timestamp("readAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, table => [index("memberNotifications_user_read_created_idx").on(table.userId, table.readAt, table.createdAt)]);
+
 export const follows = mysqlTable("follows", {
   followerId: int("followerId").notNull(),
   followingId: int("followingId").notNull(),

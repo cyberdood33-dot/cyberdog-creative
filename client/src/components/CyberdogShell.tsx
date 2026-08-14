@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Bell, ChevronRight, CircleHelp, Compass, Dog, FileText, Home, LogOut, Menu, MessageSquareText, Newspaper, PanelTop, Search, ShieldCheck, Sparkles, UsersRound, X } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useEffect, useState, type PropsWithChildren, type ReactNode } from "react";
+import { NotificationBell } from "@/components/NotificationBell";
 
 type NavItem = { label: string; href: string; icon: typeof Home };
 
@@ -65,7 +66,7 @@ export function CyberdogShell({ children, className }: PropsWithChildren<{ class
           <Link href="/search" className="grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-white hover:text-zinc-900" aria-label="Search Cyberdog Creative"><Search className="size-4" /></Link>
           {isAuthenticated ? <>
             <Link href="/messages" className="hidden sm:grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-white hover:text-zinc-900" aria-label="Messages"><MessageSquareText className="size-4" /></Link>
-            <Link href="/account" className="hidden sm:grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-white hover:text-zinc-900" aria-label="Account"><Bell className="size-4" /></Link>
+            <span className="hidden sm:block"><NotificationBell /></span>
             <button onClick={() => logout()} className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-bold text-zinc-800 shadow-sm transition hover:border-zinc-300"><span className="hidden sm:inline">{user?.name?.split(" ")[0] || "Account"}</span><LogOut className="size-3.5" /></button>
           </> : <button onClick={() => startLogin()} className="rounded-lg bg-[#e52c2c] px-4 py-2 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(229,44,44,.25)] transition hover:bg-[#ca1f1f] active:scale-[.97]">Sign in</button>}
           <button onClick={() => setMenuOpen(open => !open)} aria-expanded={menuOpen} aria-controls="mobile-primary-navigation" className="grid size-11 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-700 shadow-sm lg:hidden" aria-label={menuOpen ? "Close primary navigation" : "Open primary navigation"}>{menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}</button>

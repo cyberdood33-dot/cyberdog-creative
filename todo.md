@@ -55,12 +55,12 @@
 - [ ] Configure the confirmed Discourse community host, SSO handoff, moderation roles, and live topic-preview source.
 - [ ] Revisit Auth0 and Discourse configuration after the user supplies provider credentials and hosting details; continue credential-independent features in the interim.
 - [ ] Add member saved items so authenticated members can bookmark portfolio case files, journal posts, documentation, and social updates for later review.
-- [ ] Define and document a coherent role for HTML5, CSS3, Bootstrap 5-compatible patterns, FastAPI, Angular, MongoDB, and the existing React/TypeScript and relational data stack before adding runtimes or duplicate data stores.
-- [ ] Evaluate whether a focused FastAPI service adds a concrete capability that cannot be handled safely by the existing server, including deployment implications for the managed runtime.
+- [x] Define and document a coherent role for HTML5, CSS3, Bootstrap 5-compatible patterns, FastAPI, Angular, MongoDB, and the existing React/TypeScript and relational data stack before adding runtimes or duplicate data stores.
+- [x] Evaluate whether a focused FastAPI service adds a concrete capability that cannot be handled safely by the existing server, including deployment implications for the managed runtime.
 - [ ] Keep Angular and MongoDB deferred unless the user specifies a separate client application or document-oriented data workload that justifies their operational complexity.
-- [ ] Add a focused FastAPI service for authenticated AI automation, analytics-processing jobs, and controlled import/export endpoints without duplicating the operational relational data store.
+- [x] Add a focused FastAPI service for authenticated AI automation, analytics-processing jobs, and controlled import/export endpoints without duplicating the operational relational data store.
 - [ ] Define strict service-to-service authentication, user data boundaries, file-size limits, audit logging, and supported import/export schemas for the FastAPI surface.
-- [ ] Build an owner-facing operations surface for approved analytics summaries and export workflow status without fabricating traffic data.
+- [x] Build an owner-facing operations surface for approved analytics summaries and export workflow status without fabricating traffic data.
 - [ ] Add consistent explicit focus-visible affordances and contrast-safe interactive states across all major Cyberdog Creative routes.
 - [x] Run and document mobile verification for every suite route, then resolve any discovered small-screen layout, navigation, touch-target, or modal issues.
 - [ ] Complete an accessibility enhancement pass covering keyboard navigation, focus visibility, landmarks, semantic labels, contrast, motion preferences, and form/modal accessibility.
@@ -69,3 +69,10 @@
 - [ ] Add privacy-conscious analytics visibility for the owner using the project analytics system and a compact site performance dashboard.
 - [ ] Add push-notification preference controls and documented browser-permission handling, ready for the project notification service.
 - [ ] Audit documented contrast ratios and keyboard-only behavior route by route, then remedy any accessibility failure before declaring the full accessibility pass complete.
+- [x] Implement protected FastAPI export endpoints, corresponding owner workflows, supported export schemas, and authorization coverage for controlled data export.
+- [x] Model and migrate custom member notifications with type, title, body, destination, read state, and per-user ownership.
+- [x] Implement an accessible in-app notification center with unread count, destination links, single-item read state, and mark-all-read controls.
+- [x] Add owner-only notification creation for a target member, with audit-safe authorization and no use of private message contents.
+- [x] Connect in-app preferences to optional browser-notification permission requests and explain the delivery limitations when no push provider is configured.
+- [x] Add notification authorization, read-state, and preference tests, plus responsive visual verification.
+- [x] Add automated browser-notification permission and preference behavior coverage for the custom notification experience.
