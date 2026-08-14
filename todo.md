@@ -1,0 +1,53 @@
+# Project TODO
+
+- [x] Establish a bold red Cyberdog Creative visual system, including an original detective-dog mascot concept that does not copy any existing character.
+- [ ] Build a branded, animated entry screen that prefetches portfolio, blog, and forum data before revealing the application.
+- [x] Implement responsive public navigation covering Home, Work, About, Journal, Community, Contact, and member access.
+- [x] Create the Cyberdog Creative landing page, including agency positioning, service capabilities, portfolio highlights, about content, and clear community calls to action.
+- [ ] Model and migrate data for portfolio items, blog posts, forum threads, forum replies, contact messages, and user profile details.
+- [ ] Implement blog listing, individual posts, and owner-only create, edit, and delete controls.
+- [ ] Implement a threaded discussion forum with authenticated thread/reply creation and administrator moderation controls.
+- [ ] Implement a contact form that validates, submits, and stores visitor messages for the owner.
+- [ ] Implement member profiles with display name, avatar, authored posts, and forum activity.
+- [x] Integrate the provided OAuth sign-in/sign-out flow and enforce member/admin authorization at the server layer.
+- [ ] Add loading, empty, success, and error states across all data-backed user journeys.
+- [x] Write and run Vitest coverage for permission-sensitive and data-validation paths.
+- [ ] Validate the application visually across desktop and mobile layouts, including the preload reveal flow.
+- [x] Model and migrate follow relationships, friend requests, accepted friendships, encrypted conversations, participant keys, and encrypted message envelopes.
+- [ ] Implement a private member messenger with browser-side end-to-end message encryption, encrypted message storage, participant-only conversation access, and clear recovery limitations.
+- [ ] Implement follow and friend discovery, request, accept, decline, and remove workflows with member-facing profile controls.
+- [ ] Add message, relationship, and authorization tests, including negative-access scenarios.
+- [x] Create a unified Cyberdog Account hub for profile, privacy, security, social connections, and communication preferences.
+- [x] Add persistent member preferences and account-management procedures with owner-safe authorization boundaries.
+- [x] Surface consistent account access and context across the portfolio, blog, community, messaging, and profile experiences.
+- [ ] Add account-management validation and authorization tests.
+- [x] Design domain-aware application boundaries for cyberdog.io, blog.cyberdog.io, community.cyberdog.io, account.cyberdog.io, and contact.cyberdog.io while preserving shared authentication and brand context.
+- [x] Implement subdomain-ready navigation and development-route fallbacks that can be mapped to custom domains after publication.
+- [x] Document the custom-domain mapping sequence and cookie/authorization boundaries for the final deployment.
+- [ ] Add consent-driven AI assistance for creative-brief ideation, draft refinement, and community discovery, with clear human review before publishing.
+- [ ] Add secured AI procedures and user-facing safeguards that prevent private messenger content from being sent to AI features by default.
+- [x] Apply an original, accessible multicolor spectrum accent treatment to AI and focused account controls without imitating another product interface.
+- [ ] Add tests for AI input validation, authorization, and protected-content boundaries.
+- [ ] Model and migrate support tickets, ticket replies, documentation categories, and documentation pages with owner-only management controls.
+- [ ] Build a help desk for authenticated users to create, review, and update issue tickets, with administrator status and response controls.
+- [ ] Build a docs.cyberdog.io-ready documentation portal with structured navigation, search-ready content organization, and editor controls for the owner.
+- [x] Extend the domain plan to include support.cyberdog.io and docs.cyberdog.io with local development route fallbacks.
+- [x] Refine the UI toward an original developer-community aesthetic: dense but legible information layouts, practical cards, threaded conversations, and a distinct Cyberdog red system rather than copied third-party styling.
+- [x] Model and migrate social updates, comments, reactions, and feed visibility with moderator controls.
+- [ ] Implement a member social feed with post creation, threaded comments, reactions, author controls, and social discovery tied to follows.
+- [ ] Add social-feed authorization, moderation, and interaction tests.
+- [ ] Integrate a preexisting form-management API for polished contact and support intake instead of rebuilding advanced form capabilities.
+- [ ] Create branded contact and support form definitions, embedded or linked from Cyberdog Creative, with submission references visible to authorized administrators.
+- [ ] Verify integration error handling and document required form-service configuration before release.
+- [ ] Integrate a mature hosted discussion platform for community threads, categories, moderation, notifications, and replies rather than recreating the forum engine.
+- [ ] Design a branded community.cyberdog.io transition, topic-preview surface, and account handoff to the hosted discussion platform.
+- [ ] Document the selected discussion platform’s SSO, moderation, domain, and data-ownership configuration prerequisites.
+- [ ] Integrate a dedicated authentication provider with social login, callback handling, and shared account claims appropriate for the Cyberdog subdomain architecture.
+- [x] Preserve the existing platform login as a development fallback until the selected provider is configured with approved credentials.
+- [x] Document required authentication-provider tenant, callback URL, custom-domain, SSO, and secret configuration before release.
+- [ ] Create and synchronize the Cyberdog Creative codebase to the approved public cyberdog-creative GitHub repository while excluding secrets, user data, and environment configuration.
+- [x] Add repository documentation covering local setup, supported integrations, and safe production configuration.
+- [x] Implement browser-encrypted refresh-based message retrieval suitable for standard autoscaling hosting, with a user-visible refresh cadence and no persistent socket server.
+- [ ] Embed the managed contact and help-desk forms in Cyberdog Creative and surface authoritative submission references to the owner through an approved form-service API or dashboard integration.
+- [ ] Add persistent conversation metadata and complete a tested two-member, multi-session encrypted-message flow before presenting private messaging as production-ready end-to-end encryption.
+- [ ] Select and configure one hosted forum provider, then implement its live topic previews and approved SSO/account handoff.

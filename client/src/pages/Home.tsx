@@ -1,33 +1,54 @@
+import { ArrowLink, CyberdogShell, Eyebrow, ExternalOrLocalLink, productUrl } from "@/components/CyberdogShell";
+import { useBootstrap } from "@/contexts/BootstrapContext";
+import { startLogin } from "@/const";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { ArrowUpRight, BadgeCheck, BookOpenText, Braces, CheckCircle2, CircleDotDashed, Compass, FileText, MessageSquareText, Orbit, Radar, Sparkles, UsersRound } from "lucide-react";
+import { Link } from "wouter";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
+const mascotUrl = "/manus-storage/cyberdog-detective-mascot_81406dc5.png";
+
+const fallbackWork = [
+  { title: "Signal Cabinet", summary: "A modular design system that gives complex tools a clearer voice.", kind: "Design systems" },
+  { title: "Uncommon Sense", summary: "A community-led editorial space for experiments worth sharing.", kind: "Editorial" },
+  { title: "Lighthouse Relay", summary: "A developer-facing launch strategy built around documentation and trust.", kind: "Product strategy" },
+];
+
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
-
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
+  const { portfolio, posts, feed, docs } = useBootstrap();
+  const { isAuthenticated } = useAuth();
+  const work = portfolio.length ? portfolio : fallbackWork;
+  return <CyberdogShell>
+    <section className="relative overflow-hidden border-b border-zinc-200 bg-[#f7f5f1]">
+      <div className="hero-grid absolute inset-0 opacity-45" />
+      <div className="container relative grid min-h-[670px] items-center gap-10 py-16 lg:grid-cols-[1.04fr_.96fr] lg:py-20">
+        <div className="max-w-2xl">
+          <Eyebrow>Creative systems / community signal</Eyebrow>
+          <h1 className="font-display text-[clamp(3.5rem,8vw,7.25rem)] font-extrabold leading-[.86] tracking-[-.085em] text-zinc-950">Good dogs<br /><span className="text-[#e52c2c]">find signal.</span></h1>
+          <p className="mt-7 max-w-xl text-lg leading-8 text-zinc-600">Cyberdog Creative is the creative studio and developer community for sharper ideas, better systems, and more useful internet culture.</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/work" className="inline-flex items-center gap-2 rounded-xl bg-[#e52c2c] px-5 py-3 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(229,44,44,.25)] transition hover:bg-[#c82020] active:scale-[.97]">Explore the work <ArrowUpRight className="size-4" /></Link>
+            {isAuthenticated ? <Link href="/feed" className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-3 text-sm font-extrabold text-zinc-800 shadow-sm transition hover:border-zinc-300">Enter the feed <Sparkles className="size-4 text-[#e52c2c]" /></Link> : <button onClick={() => startLogin()} className="spectrum-button rounded-xl px-5 py-3 text-sm font-extrabold text-zinc-900 transition active:scale-[.97]">Join the pack</button>}
+          </div>
+          <div className="mt-12 grid grid-cols-3 gap-5 border-t border-zinc-300 pt-6"><Stat label="Suite areas" value="06" /><Stat label="Hosted forms" value="02" /><Stat label="First-load wait" value="0" suffix="ms*" /></div>
+        </div>
+        <div className="relative mx-auto w-full max-w-xl lg:justify-self-end">
+          <div className="absolute -inset-6 rounded-[2.5rem] bg-[#e52c2c]/8 blur-3xl" />
+          <div className="relative overflow-hidden rounded-[2rem] border border-zinc-200 bg-[#fffdf9] p-6 shadow-[0_30px_70px_rgba(34,27,23,.13)] sm:p-9">
+            <div className="absolute right-5 top-5 inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#ca2828]"><CircleDotDashed className="size-3" /> Field office</div>
+            <img src={mascotUrl} alt="Cyberdog Creative original detective dog mascot" className="mx-auto mt-7 h-[330px] w-full object-contain sm:h-[410px]" />
+            <div className="mt-2 flex items-end justify-between border-t border-zinc-100 pt-5"><div><p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-zinc-400">Cyberdog #001</p><p className="mt-1 text-sm font-bold">The case for better digital work.</p></div><div className="grid size-10 place-items-center rounded-xl bg-zinc-950 text-white"><Compass className="size-4" /></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section className="border-b border-zinc-200 bg-zinc-950 py-5 text-white"><div className="container flex flex-wrap items-center justify-between gap-4"><p className="flex items-center gap-2 text-sm font-semibold"><Radar className="size-4 text-red-400" /> A connected suite for creative work, learning, and community exchange.</p><div className="flex items-center gap-5 text-xs font-bold text-zinc-400"><ExternalOrLocalLink href={productUrl('community','/community')} className="hover:text-white">community.cyberdog.io</ExternalOrLocalLink><ExternalOrLocalLink href={productUrl('docs','/docs')} className="hover:text-white">docs.cyberdog.io</ExternalOrLocalLink></div></div></section>
+    <section className="container py-20"><div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr]"><div><Eyebrow>Selected case files</Eyebrow><h2 className="font-display text-4xl font-extrabold leading-none tracking-[-.06em]">Work built to be <span className="text-[#e52c2c]">useful.</span></h2><p className="mt-5 max-w-sm text-sm leading-6 text-zinc-600">The strongest creative work does more than announce itself. It creates momentum, meaning, and a system people can use.</p><div className="mt-7"><ArrowLink href="/work">View the work archive</ArrowLink></div></div><div className="grid gap-4 md:grid-cols-3">{work.slice(0,3).map((item:any, i:number) => <article key={item.id ?? item.title} className="group relative min-h-[230px] overflow-hidden rounded-2xl border border-zinc-200 bg-white p-5 shadow-[0_6px_18px_rgba(38,24,18,.04)] transition hover:-translate-y-1 hover:shadow-xl"><div className={i === 1 ? "absolute inset-x-0 top-0 h-1.5 bg-zinc-950" : "absolute inset-x-0 top-0 h-1.5 bg-[#e52c2c]"} /><p className="mt-4 text-[10px] font-extrabold uppercase tracking-[.16em] text-zinc-400">{item.kind}</p><h3 className="mt-3 font-display text-2xl font-extrabold tracking-[-.045em]">{item.title}</h3><p className="mt-3 text-sm leading-6 text-zinc-600">{item.summary}</p><ArrowUpRight className="absolute bottom-5 right-5 size-5 text-zinc-400 transition group-hover:text-[#e52c2c]" /></article>)}</div></div></section>
+    <section className="border-y border-zinc-200 bg-white"><div className="container grid gap-10 py-20 lg:grid-cols-[1.1fr_.9fr]"><div><Eyebrow>Why the pack exists</Eyebrow><h2 className="max-w-2xl font-display text-4xl font-extrabold leading-[.98] tracking-[-.06em]">Creative direction meets a <span className="text-[#e52c2c]">working community.</span></h2><div className="mt-9 grid gap-4 sm:grid-cols-2"><Feature icon={Braces} title="Build in the open" body="Share the reasoning behind the work, not only the finished artifact." /><Feature icon={UsersRound} title="Find your people" body="Follow creative operators, join conversations, and exchange useful signals." /><Feature icon={BookOpenText} title="Document the good stuff" body="Clear guides and useful patterns live in the dedicated docs system." /><Feature icon={MessageSquareText} title="Talk privately" body="Browser-encrypted message envelopes keep private conversations private by design." /></div></div><div className="rounded-[1.75rem] bg-zinc-950 p-7 text-white sm:p-9"><div className="flex items-center justify-between"><span className="text-xs font-extrabold uppercase tracking-[.16em] text-zinc-500">Live from the suite</span><Orbit className="size-5 text-red-400" /></div><div className="mt-8 space-y-5">{(feed.length ? feed.slice(0,2) : [{authorName:"Cyberdog Creative", post:{body:"The community feed is ready for launch notes, useful questions, and good internet energy."}},{authorName:"Field Note", post:{body:"Docs, support, and private messages are being organized as one connected system."}}]).map((item:any, index:number) => <div key={index} className="rounded-xl border border-white/10 bg-white/[.04] p-4"><div className="flex items-center gap-3"><span className="grid size-8 place-items-center rounded-full bg-[#e52c2c] text-xs font-black">{(item.authorName || "C").slice(0,1)}</span><div><p className="text-sm font-bold">{item.authorName || "Cyberdog member"}</p><p className="text-[11px] text-zinc-500">Signal dispatch</p></div></div><p className="mt-3 text-sm leading-6 text-zinc-300">{item.post?.body}</p></div>)}</div><div className="mt-7 flex gap-3"><Link href="/feed" className="rounded-lg bg-white px-4 py-2.5 text-sm font-extrabold text-zinc-950">Open social feed</Link><Link href="/community" className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-extrabold text-white">Community</Link></div></div></div></section>
+    <section className="container py-20"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><Eyebrow>From the journal</Eyebrow><h2 className="font-display text-4xl font-extrabold tracking-[-.06em]">Notes with <span className="text-[#e52c2c]">teeth.</span></h2></div><ArrowLink href={productUrl('blog','/journal')}>Open the journal</ArrowLink></div><div className="mt-9 grid gap-4 md:grid-cols-3">{(posts.length ? posts.slice(0,3).map((item:any) => item.post ? item.post : item) : [{title:"Why creative systems are good for everyone",excerpt:"A little structure makes room for more honest, more interesting work."},{title:"Make the interface do some of the explaining",excerpt:"The best product copy often starts inside the flow, not beneath it."},{title:"On being a useful creative partner",excerpt:"Signal over spectacle; clarity over cleverness."}]).map((post:any) => <article key={post.id ?? post.title} className="rounded-xl border border-zinc-200 bg-white p-5"><p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#e52c2c]">Journal / Dispatch</p><h3 className="mt-3 font-display text-xl font-extrabold leading-tight tracking-[-.04em]">{post.title}</h3><p className="mt-3 text-sm leading-6 text-zinc-600">{post.excerpt}</p><div className="mt-5"><ArrowLink href={post.slug ? `/journal/${post.slug}` : "/journal"}>Read note</ArrowLink></div></article>)}</div></section>
+    <section className="border-t border-zinc-200 bg-[#e52c2c] py-16 text-white"><div className="container flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[.18em] text-red-100">Start a case</p><h2 className="mt-3 max-w-xl font-display text-4xl font-extrabold leading-none tracking-[-.06em]">Have an ambitious problem? <span className="text-red-100">Good.</span></h2></div><Link href="/contact" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-[#cc2525] shadow-lg transition hover:bg-red-50">Talk to Cyberdog <ArrowUpRight className="size-4" /></Link></div></section>
+    <p className="sr-only">The initial suite content has been preloaded before interaction.</p>
+  </CyberdogShell>;
 }
+
+function Stat({ label, value, suffix }: { label: string; value: string; suffix?: string }) { return <div><p className="font-display text-2xl font-extrabold tracking-[-.05em]">{value}<span className="text-[#e52c2c]">{suffix}</span></p><p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-zinc-500">{label}</p></div>; }
+function Feature({ icon: Icon, title, body }: { icon: typeof Braces; title: string; body: string }) { return <div className="rounded-xl border border-zinc-200 bg-[#f9f8f5] p-4"><Icon className="size-5 text-[#e52c2c]" /><h3 className="mt-3 text-sm font-extrabold">{title}</h3><p className="mt-1.5 text-sm leading-5 text-zinc-600">{body}</p></div>; }
