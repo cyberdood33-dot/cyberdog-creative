@@ -45,7 +45,7 @@
 - [ ] Integrate a dedicated authentication provider with social login, callback handling, and shared account claims appropriate for the Cyberdog subdomain architecture.
 - [x] Preserve the existing platform login as a development fallback until the selected provider is configured with approved credentials.
 - [x] Document required authentication-provider tenant, callback URL, custom-domain, SSO, and secret configuration before release.
-- [ ] Create and synchronize the Cyberdog Creative codebase to the approved public cyberdog-creative GitHub repository while excluding secrets, user data, and environment configuration.
+- [x] Create and synchronize the Cyberdog Creative codebase to the approved public cyberdog-creative GitHub repository while excluding secrets, user data, and environment configuration.
 - [x] Add repository documentation covering local setup, supported integrations, and safe production configuration.
 - [x] Implement browser-encrypted refresh-based message retrieval suitable for standard autoscaling hosting, with a user-visible refresh cadence and no persistent socket server.
 - [ ] Embed the managed contact and help-desk forms in Cyberdog Creative and surface authoritative submission references to the owner through an approved form-service API or dashboard integration.
