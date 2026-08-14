@@ -51,3 +51,13 @@
 - [ ] Embed the managed contact and help-desk forms in Cyberdog Creative and surface authoritative submission references to the owner through an approved form-service API or dashboard integration.
 - [ ] Add persistent conversation metadata and complete a tested two-member, multi-session encrypted-message flow before presenting private messaging as production-ready end-to-end encryption.
 - [ ] Select and configure one hosted forum provider, then implement its live topic previews and approved SSO/account handoff.
+- [ ] Configure the confirmed Auth0 tenant credentials and exact Cyberdog Creative callback origins for production sign-in and SSO.
+- [ ] Configure the confirmed Discourse community host, SSO handoff, moderation roles, and live topic-preview source.
+- [ ] Add consistent explicit focus-visible affordances and contrast-safe interactive states across all major Cyberdog Creative routes.
+- [x] Run and document mobile verification for every suite route, then resolve any discovered small-screen layout, navigation, touch-target, or modal issues.
+- [ ] Complete an accessibility enhancement pass covering keyboard navigation, focus visibility, landmarks, semantic labels, contrast, motion preferences, and form/modal accessibility.
+- [x] Refine all suite pages and navigation for a mobile-first experience, including compact navigation, touch targets, readable type, responsive grids, and small-screen modal behavior.
+- [x] Add richer portfolio case-study presentation with project details, outcomes, media-ready structure, and clear inquiry paths.
+- [ ] Add privacy-conscious analytics visibility for the owner using the project analytics system and a compact site performance dashboard.
+- [ ] Add push-notification preference controls and documented browser-permission handling, ready for the project notification service.
+- [ ] Audit documented contrast ratios and keyboard-only behavior route by route, then remedy any accessibility failure before declaring the full accessibility pass complete.

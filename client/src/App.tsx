@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PrefetchGate } from "@/components/PrefetchGate";
 import Account from "@/pages/Account";
+import Analytics from "@/pages/Analytics";
 import Admin from "@/pages/Admin";
 import About from "@/pages/About";
 import Assist from "@/pages/Assist";
@@ -14,6 +15,7 @@ import Journal from "@/pages/Journal";
 import Messages from "@/pages/Messages";
 import NotFound from "@/pages/NotFound";
 import SearchPage from "@/pages/SearchPage";
+import Profile from "@/pages/Profile";
 import Support from "@/pages/Support";
 import Work from "@/pages/Work";
 import { Route, Switch } from "wouter";
@@ -34,10 +36,12 @@ function Router() {
     <Route path="/contact" component={Contact} />
     <Route path="/support" component={Support} />
     <Route path="/account" component={Account} />
+    <Route path="/analytics" component={Analytics} />
     <Route path="/admin" component={Admin} />
     <Route path="/messages" component={Messages} />
     <Route path="/assist" component={Assist} />
     <Route path="/search" component={SearchPage} />
+    <Route path="/profile/:memberId" component={Profile} />
     <Route component={NotFound} />
   </Switch>;
 }

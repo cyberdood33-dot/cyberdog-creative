@@ -1,9 +1,9 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { cn } from "@/lib/utils";
-import { Bell, ChevronRight, CircleHelp, Compass, Dog, FileText, Home, LogOut, MessageSquareText, Newspaper, PanelTop, Search, ShieldCheck, Sparkles, UsersRound } from "lucide-react";
+import { Bell, ChevronRight, CircleHelp, Compass, Dog, FileText, Home, LogOut, Menu, MessageSquareText, Newspaper, PanelTop, Search, ShieldCheck, Sparkles, UsersRound, X } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import type { PropsWithChildren, ReactNode } from "react";
+import { useEffect, useState, type PropsWithChildren, type ReactNode } from "react";
 
 type NavItem = { label: string; href: string; icon: typeof Home };
 
@@ -45,8 +45,12 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
 export function CyberdogShell({ children, className }: PropsWithChildren<{ className?: string }>) {
   const [location] = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => setMenuOpen(false), [location]);
 
   return <div className="min-h-screen bg-[#f7f5f1] text-zinc-950">
+    <a href="#main-content" className="sr-only fixed left-4 top-4 z-[60] rounded-lg bg-zinc-950 px-4 py-2 text-sm font-bold text-white focus:not-sr-only">Skip to main content</a>
     <header className="sticky top-0 z-40 border-b border-zinc-200/90 bg-[#f7f5f1]/92 backdrop-blur-xl">
       <div className="container flex h-[68px] items-center justify-between gap-4">
         <BrandMark />
@@ -54,7 +58,7 @@ export function CyberdogShell({ children, className }: PropsWithChildren<{ class
           {navItems.map(item => {
             const Icon = item.icon;
             const active = item.href === "/" ? location === "/" : location.startsWith(item.href);
-            return <Link key={item.href} href={item.href} className={cn("inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors", active ? "bg-white text-[#c92020] shadow-sm ring-1 ring-zinc-200" : "text-zinc-600 hover:bg-white hover:text-zinc-950")}><Icon className="size-3.5" />{item.label}</Link>;
+            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={cn("inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors", active ? "bg-white text-[#c92020] shadow-sm ring-1 ring-zinc-200" : "text-zinc-600 hover:bg-white hover:text-zinc-950")}><Icon className="size-3.5" />{item.label}</Link>;
           })}
         </nav>
         <div className="flex items-center gap-2">
@@ -64,10 +68,12 @@ export function CyberdogShell({ children, className }: PropsWithChildren<{ class
             <Link href="/account" className="hidden sm:grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-white hover:text-zinc-900" aria-label="Account"><Bell className="size-4" /></Link>
             <button onClick={() => logout()} className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-bold text-zinc-800 shadow-sm transition hover:border-zinc-300"><span className="hidden sm:inline">{user?.name?.split(" ")[0] || "Account"}</span><LogOut className="size-3.5" /></button>
           </> : <button onClick={() => startLogin()} className="rounded-lg bg-[#e52c2c] px-4 py-2 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(229,44,44,.25)] transition hover:bg-[#ca1f1f] active:scale-[.97]">Sign in</button>}
+          <button onClick={() => setMenuOpen(open => !open)} aria-expanded={menuOpen} aria-controls="mobile-primary-navigation" className="grid size-11 place-items-center rounded-lg border border-zinc-200 bg-white text-zinc-700 shadow-sm lg:hidden" aria-label={menuOpen ? "Close primary navigation" : "Open primary navigation"}>{menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}</button>
         </div>
       </div>
+      {menuOpen && <nav id="mobile-primary-navigation" aria-label="Mobile primary navigation" className="border-t border-zinc-200 bg-[#f7f5f1] px-4 pb-4 pt-3 shadow-lg lg:hidden"><div className="container grid grid-cols-2 gap-2 px-0">{navItems.map(item => { const Icon = item.icon; const active = item.href === "/" ? location === "/" : location.startsWith(item.href); return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={cn("flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold", active ? "bg-white text-[#c92020] shadow-sm" : "text-zinc-700 hover:bg-white")}><Icon className="size-4" />{item.label}</Link>; })}</div></nav>}
     </header>
-    <main className={className}>{children}</main>
+    <main id="main-content" tabIndex={-1} className={className}>{children}</main>
     <footer className="border-t border-zinc-200 bg-white">
       <div className="container grid gap-9 py-12 md:grid-cols-[1.25fr_repeat(3,1fr)]">
         <div><BrandMark /><p className="mt-4 max-w-sm text-sm leading-6 text-zinc-600">A creative systems studio and developer community for people who care about signal, craft, and useful technology.</p><div className="spectrum-rule mt-6 max-w-[220px]" /></div>
