@@ -11,6 +11,7 @@ import {
   friendships,
   InsertUser,
   portfolioItems,
+  savedItems,
   socialComments,
   socialPosts,
   socialReactions,
@@ -118,6 +119,24 @@ export async function toggleReaction(userId: number, postId: number, reaction: "
   const existing = await db.select().from(socialReactions).where(and(eq(socialReactions.userId, userId), eq(socialReactions.postId, postId))).limit(1);
   if (existing[0]) await db.delete(socialReactions).where(eq(socialReactions.id, existing[0].id));
   else await db.insert(socialReactions).values({ userId, postId, reaction });
+}
+
+export async function toggleSavedItem(userId: number, itemType: "portfolio" | "blog" | "docs" | "social", itemId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  const existing = await db.select().from(savedItems).where(and(eq(savedItems.userId, userId), eq(savedItems.itemType, itemType), eq(savedItems.itemId, itemId))).limit(1);
+  if (existing[0]) {
+    await db.delete(savedItems).where(eq(savedItems.id, existing[0].id));
+    return { saved: false };
+  }
+  await db.insert(savedItems).values({ userId, itemType, itemId });
+  return { saved: true };
+}
+
+export async function listSavedItems(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(savedItems).where(eq(savedItems.userId, userId)).orderBy(desc(savedItems.createdAt));
 }
 
 export async function followMember(followerId: number, followingId: number) {

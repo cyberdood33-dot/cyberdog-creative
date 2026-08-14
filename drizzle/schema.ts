@@ -91,6 +91,17 @@ export const socialReactions = mysqlTable("socialReactions", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 }, table => [uniqueIndex("socialReactions_user_post_unique").on(table.userId, table.postId)]);
 
+export const savedItems = mysqlTable("savedItems", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  itemType: mysqlEnum("itemType", ["portfolio", "blog", "docs", "social"]).notNull(),
+  itemId: int("itemId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, table => [
+  uniqueIndex("savedItems_user_item_unique").on(table.userId, table.itemType, table.itemId),
+  index("savedItems_user_created_idx").on(table.userId, table.createdAt),
+]);
+
 export const follows = mysqlTable("follows", {
   followerId: int("followerId").notNull(),
   followingId: int("followingId").notNull(),

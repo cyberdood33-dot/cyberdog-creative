@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { PrefetchGate } from "@/components/PrefetchGate";
 import Account from "@/pages/Account";
 import Analytics from "@/pages/Analytics";
+import Automation from "@/pages/Automation";
 import Admin from "@/pages/Admin";
 import About from "@/pages/About";
 import Assist from "@/pages/Assist";
@@ -37,6 +38,7 @@ function Router() {
     <Route path="/support" component={Support} />
     <Route path="/account" component={Account} />
     <Route path="/analytics" component={Analytics} />
+    <Route path="/automation" component={Automation} />
     <Route path="/admin" component={Admin} />
     <Route path="/messages" component={Messages} />
     <Route path="/assist" component={Assist} />

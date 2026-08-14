@@ -5,6 +5,7 @@ import { invokeLLM } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import * as db from "./db";
+import { callFastapi } from "./fastapiService";
 
 const text = (min: number, max: number) => z.string().trim().min(min).max(max);
 const url = z.string().url().max(2048).optional();
@@ -51,6 +52,10 @@ export const appRouter = router({
     preferences: protectedProcedure.query(({ ctx }) => db.getProfile(ctx.user.id)),
     updatePreferences: protectedProcedure.input(z.object({ showEmail: z.boolean(), allowDirectMessages: z.boolean(), digestOptIn: z.boolean(), aiAssistOptIn: z.boolean() })).mutation(({ ctx, input }) => db.upsertPreferences(ctx.user.id, input)),
   }),
+  saved: router({
+    list: protectedProcedure.query(({ ctx }) => db.listSavedItems(ctx.user.id)),
+    toggle: protectedProcedure.input(z.object({ itemType: z.enum(["portfolio", "blog", "docs", "social"]), itemId: z.number().int().positive() })).mutation(({ ctx, input }) => db.toggleSavedItem(ctx.user.id, input.itemType, input.itemId)),
+  }),
   messenger: router({
     registerDeviceKey: protectedProcedure.input(z.object({ publicJwk: z.string().min(20).max(12000) })).mutation(({ ctx, input }) => db.upsertProfile(ctx.user.id, { publicEncryptionKey: input.publicJwk })),
     memberKey: protectedProcedure.input(z.object({ memberId: z.number().int().positive() })).query(({ input }) => db.getMemberKey(input.memberId)),
@@ -89,6 +94,11 @@ export const appRouter = router({
       const content = response.choices[0]?.message.content;
       return { content: typeof content === "string" ? content : "Cyberdog Assist could not prepare a response." };
     }),
+  }),
+  automation: router({
+    analyticsSummary: protectedProcedure.input(z.object({ events: z.array(z.object({ eventType: text(1, 120), occurredAt: z.string().datetime().optional() })).max(2000) })).mutation(({ input }) => callFastapi<{ event_count: number; unique_event_types: number; top_events: Array<{ event_type: string; count: number }>; note: string }>("/analytics/summarize", { events: input.events.map(event => ({ event_type: event.eventType, occurred_at: event.occurredAt })) })),
+    importPreview: adminProcedure.input(z.object({ format: z.enum(["csv", "json"]), content: text(2, 2_000_000), allowedColumns: z.array(text(1, 120)).min(1).max(80) })).mutation(({ input }) => callFastapi<{ format: string; row_count: number; columns: string[]; unsupported_columns: string[]; accepted: boolean; note: string }>("/data/import-preview", { format: input.format, content: input.content, allowed_columns: input.allowedColumns })),
+    automationBrief: protectedProcedure.input(z.object({ prompt: text(12, 2200) })).mutation(({ input }) => callFastapi<{ content: string }>("/ai/brief", input)),
   }),
 });
 

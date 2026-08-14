@@ -30,9 +30,25 @@ pnpm test
 
 ## Architecture Notes
 
-The project uses React, TypeScript, Tailwind CSS, Express, tRPC, Drizzle, and MySQL-compatible storage. Public landing, work, journal, feed, docs, and account data are loaded through a **prefetch gate** before the UI is revealed. The gate will not render the main site until its critical initial fetch completes.
+The project uses a React and TypeScript interface built with semantic HTML5, CSS3, Tailwind CSS, Express, tRPC, Drizzle, and MySQL-compatible storage. Public landing, work, journal, feed, docs, and account data are loaded through a **prefetch gate** before the UI is revealed. The gate will not render the main site until its critical initial fetch completes.
 
 Private messaging uses a browser-created ECDH P-256 device key, HKDF-SHA-256 key derivation, and AES-256-GCM message envelopes. Ciphertext and initialization vectors are stored server-side; message bodies are encrypted before submission. This is a device-bound model: clearing the browser’s local storage removes that device’s private key and prevents it from decrypting older conversations. Private message bodies are intentionally excluded from the AI feature surface.
+
+### FastAPI Automation Service
+
+The project includes a focused internal FastAPI service under `fastapi_service/`. It is launched as a child process of the Node application, binds only to `127.0.0.1`, and requires a Node-generated internal token on every request. The public application reaches it through typed, protected tRPC procedures; browsers never receive the internal service token or a direct FastAPI URL.
+
+| FastAPI capability | Current behavior | Explicit boundary |
+|---|---|---|
+| AI automation | Produces owner-requested, reviewable automation briefs through the approved server-side model gateway | No private messages, member profiles, or hidden community data are sent to the service. |
+| Analytics processing | Summarizes owner-supplied aggregate event labels | The service does not infer or process personal identities. |
+| Import preview | Checks CSV or JSON structure against an owner-approved column allowlist | The current endpoint never writes imported records; preview limits prevent oversized processing. |
+
+The root `Dockerfile` adds Python to the Node image, installs the pinned FastAPI dependencies, builds the existing application, and starts the Node server. The Node server remains the single public process and public port; it starts the local FastAPI helper only when the application starts.
+
+### Technology Decisions
+
+Bootstrap 5 can be used selectively for compatible presentation conventions, but the active interface remains Tailwind-first to avoid two competing component systems. Angular is deferred because the current public application already uses React; a separate Angular client should only be introduced for a distinct product boundary. MongoDB is also deferred because the relational store already fits accounts, permissions, relationships, and transactional community data. A document-oriented store can be introduced later for a specifically defined document or event workload rather than duplicating production records.
 
 ## External Service Configuration
 

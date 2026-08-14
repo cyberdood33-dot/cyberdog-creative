@@ -53,6 +53,14 @@
 - [ ] Select and configure one hosted forum provider, then implement its live topic previews and approved SSO/account handoff.
 - [ ] Configure the confirmed Auth0 tenant credentials and exact Cyberdog Creative callback origins for production sign-in and SSO.
 - [ ] Configure the confirmed Discourse community host, SSO handoff, moderation roles, and live topic-preview source.
+- [ ] Revisit Auth0 and Discourse configuration after the user supplies provider credentials and hosting details; continue credential-independent features in the interim.
+- [ ] Add member saved items so authenticated members can bookmark portfolio case files, journal posts, documentation, and social updates for later review.
+- [ ] Define and document a coherent role for HTML5, CSS3, Bootstrap 5-compatible patterns, FastAPI, Angular, MongoDB, and the existing React/TypeScript and relational data stack before adding runtimes or duplicate data stores.
+- [ ] Evaluate whether a focused FastAPI service adds a concrete capability that cannot be handled safely by the existing server, including deployment implications for the managed runtime.
+- [ ] Keep Angular and MongoDB deferred unless the user specifies a separate client application or document-oriented data workload that justifies their operational complexity.
+- [ ] Add a focused FastAPI service for authenticated AI automation, analytics-processing jobs, and controlled import/export endpoints without duplicating the operational relational data store.
+- [ ] Define strict service-to-service authentication, user data boundaries, file-size limits, audit logging, and supported import/export schemas for the FastAPI surface.
+- [ ] Build an owner-facing operations surface for approved analytics summaries and export workflow status without fabricating traffic data.
 - [ ] Add consistent explicit focus-visible affordances and contrast-safe interactive states across all major Cyberdog Creative routes.
 - [x] Run and document mobile verification for every suite route, then resolve any discovered small-screen layout, navigation, touch-target, or modal issues.
 - [ ] Complete an accessibility enhancement pass covering keyboard navigation, focus visibility, landmarks, semantic labels, contrast, motion preferences, and form/modal accessibility.
